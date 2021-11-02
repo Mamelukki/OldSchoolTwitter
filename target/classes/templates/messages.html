@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/layout :: head(title='Messages')" lang="en">
+        <meta charset="UTF-8" />
+        <title th:text="${title}">Title</title>
+    </head>
+    <body>
+
+        <h2>Messages</h2>
+
+        <form th:action="@{/logout}" method="POST">
+            <input type="submit" value="Logout"></input>
+        </form>
+
+        <table>
+            <tr>
+                <th>
+                    Messages
+                </th>
+            </tr> 
+            <tr th:each="message : ${messages}">
+                <td>
+                    <span th:text="${message.user.username + ': ' + message.content + ': ' + {#lists.size(message.likes)}}">Message</span>
+                    <form method="POST" th:action="@{/messages/{id}/like(id=${message.id})}">
+                        <input type="hidden" name="value" value="like"/>
+                        <input type="submit" value="Like"/>
+                    </form>
+                    <h4>Comments</h4>
+                    <ul>
+                        <li th:each="comment : ${message.comments}">
+                            <span th:text="${comment.user.username + ': ' + comment.content}">Comment</span>
+                        </li>
+                    </ul>
+                    <form class="form-inline" method="POST" th:action="@{/messages/{id}/comment(id=${message.id})}">
+                        <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
+                        <input class="btn btn-primary mb-2" type="submit" value="Add comment"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <h4>Add message</h4>
+        <form class="form-inline" method="POST" th:action="@{/messages}" action="/messages">
+            <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
+            <input class="btn btn-primary mb-2" type="submit" value="Add message"/>
+        </form>
+    </body>
+</html>

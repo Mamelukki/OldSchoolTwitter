@@ -1,0 +1,17 @@
+projekti/DefaultController.class
+projekti/MessageController.class
+projekti/CommentController.class
+projekti/MyApplication.class
+projekti/Comment.class
+projekti/AccountRepository.class
+projekti/AccountController.class
+projekti/PhotoRepository.class
+projekti/Photo.class
+projekti/PhotoController.class
+projekti/DevelopmentSecurityConfiguration.class
+projekti/MessageRepository.class
+projekti/CommentRepository.class
+projekti/CustomUserDetailsService.class
+projekti/Account.class
+projekti/Message.class
+projekti/ProductionSecurityConfiguration.class
