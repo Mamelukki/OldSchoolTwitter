@@ -48,7 +48,7 @@ public class PhotoController {
                 accountRepository.save(account);
             }
         }
-        return "redirect:/accounts";
+        return "redirect:/photos";
     }
 
     @PostMapping("/photos/profilePicture/{id}")
