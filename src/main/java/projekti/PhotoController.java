@@ -73,7 +73,6 @@ public class PhotoController {
         
         List<Photo> photos = account.getPhotos();
         photos.remove(photo);
-        account.setPhotos(photos);
         accountRepository.save(account);
         photoRepository.delete(photo);
         return "redirect:/photos";
@@ -88,7 +87,6 @@ public class PhotoController {
 
         if (!likes.contains(account)) {
             likes.add(account);
-            photo.setLikes(likes);
             photoRepository.save(photo);
         }
 
