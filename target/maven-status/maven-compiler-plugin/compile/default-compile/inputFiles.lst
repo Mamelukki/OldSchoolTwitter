@@ -10,6 +10,7 @@
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/DefaultController.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/AccountController.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/CustomUserDetailsService.java
+/home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/CurrentUserService.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/MessageController.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/DevelopmentSecurityConfiguration.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/Comment.java
