@@ -45,7 +45,6 @@ public class PhotoController {
                 photoRepository.save(photo);
                 List<Photo> photos = account.getPhotos();
                 photos.add(photo);
-                account.setPhotos(photos);
                 accountRepository.save(account);
             }
         }
