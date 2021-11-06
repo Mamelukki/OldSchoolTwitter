@@ -22,16 +22,19 @@ public class PhotoController {
 
     @Autowired
     private PhotoRepository photoRepository;
-    
+
     @Autowired
     private CurrentUserService currentUserService;
 
     @GetMapping("/photos")
     public String home(Model model) {
         Account account = currentUserService.getCurrentUser();
+        /*
         model.addAttribute("photos", account.getPhotos());
         model.addAttribute("count", account.getPhotos().size());
+         */
         model.addAttribute("currentUser", account);
+
         return "photos";
     }
 
@@ -60,7 +63,7 @@ public class PhotoController {
         accountRepository.save(account);
         return "redirect:/photos";
     }
-    
+
     @DeleteMapping("/photos/{id}/delete")
     public String deletePicture(@PathVariable Long id) {
         Account account = currentUserService.getCurrentUser();
@@ -69,7 +72,7 @@ public class PhotoController {
         if (account.getProfilePicture().equals(photo)) {
             account.setProfilePicture(null);
         }
-        
+
         List<Photo> photos = account.getPhotos();
         photos.remove(photo);
         accountRepository.save(account);

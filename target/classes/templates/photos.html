@@ -10,12 +10,10 @@
                 <p>Navbar</p>
             </header>
             
-            <form method="post" action="#" th:action="@{/logout}"><input type="submit" name="logout" value="Logout"/></form>
-
             <h2>Photo album (<span th:text="${count}">count</span> photos)</h2>
             <div class="row" >
                 <div class="col-4" th:each="photo : ${photos}">
-                    <img th:style="'width:100%; max-width:300px; height:100%; max-height:300px'" th:src="@{/photos/{id} (id=${photo.id})}"/>
+                    <img th:src="@{/photos/{id} (id=${photo.id})}"/>
                     <div th:text="${photo.description}"></div>
                     <form method="POST" th:action="@{/photos/profilePicture/{id} (id=${photo.id})}">
                         <input type="submit" value="Set as profile picture"/>
