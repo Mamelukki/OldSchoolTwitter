@@ -7,15 +7,31 @@
     <body>
 
         <h2>Accounts</h2>
-        
+
+        <div th:replace="fragments/layout :: accountSearch" />
+
         <form method="post" action="#" th:action="@{/logout}"><input type="submit" name="logout" value="Logout"/></form>
 
+        <h3>Follow requests</h3>
         <ol>
-            <li th:each="account : ${following}">
+            <li th:if="${follower.acceptedAsFollower == false}" th:each="follower : ${followRequests}">
+                <p th:text="${follower.theOneWhoFollows.name} + ' wants to follow you.'"></p>
+                <form th:action="@{/accounts/{id}/handleFollowRequest(id=${follower.id})}" th:method="POST">
+                    <input type="hidden" name="value" value="accept"/>
+                    <input type="submit" value="Accept"/>
+                </form>
+                <form th:action="@{/accounts/{id}/handleFollowRequest(id=${follower.id})}" th:method="POST">
+                    <input type="hidden" name="value" value="reject"/>
+                    <input type="submit" value="Reject"/>
+                </form>
+            </li>
+        </ol>
+        <ol>
+            <li th:each="account : ${searchResults}">
                 <span th:text="${account.username}">Username</span>
                 <span th:text="${account.name}">Name</span>
-                <form th:action="@{/accounts/{id}(id=${account.id})}" th:method="POST">
-                    <input type="submit" value="Follow"/>
+                <form th:action="@{/accounts/{id}/followRequest(id=${account.id})}" th:method="POST">
+                    <input type="submit" value="Send follow request"/>
                 </form>
             </li>
         </ol>

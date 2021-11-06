@@ -28,7 +28,7 @@ public class ProductionSecurityConfiguration extends WebSecurityConfigurerAdapte
         http.headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-                .antMatchers("/accounts","/accounts/**").permitAll()
+                .antMatchers("/register","/register/**").permitAll()
                 .antMatchers("/h2-console","/h2-console/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().permitAll().and()

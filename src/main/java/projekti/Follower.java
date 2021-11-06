@@ -1,5 +1,6 @@
 package projekti;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -11,10 +12,13 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment extends AbstractPersistable<Long> {
-
-    private String content;
+public class Follower extends AbstractPersistable<Long> {
+    
     @ManyToOne
-    private Account user;
+    private Account theOneBeingFollowed;
+    @ManyToOne
+    private Account theOneWhoFollows; 
+    private Boolean acceptedAsFollower;
+    private LocalDateTime date;
     
 }

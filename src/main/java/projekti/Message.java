@@ -20,10 +20,10 @@ public class Message extends AbstractPersistable<Long> {
     @ManyToOne
     private Account user;
     private String content;
-    private LocalDateTime time;
+    private LocalDateTime date;
     @ManyToMany
     private List<Account> likes;    
-    @OneToMany(mappedBy = "message")
+    @OneToMany
     private List<Comment> comments;
 
 }

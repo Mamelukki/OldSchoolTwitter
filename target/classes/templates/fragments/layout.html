@@ -23,5 +23,13 @@
             </nav>
         </header>
 
+        <div th:fragment="accountSearch">
+            <h3>Search users</h3>
+            <form th:action="@{/accounts/search}" th:method="GET">
+                <input type="text" name="search" id="search" />
+                <input type="submit" value="Search"/>
+            </form>
+        </div>
+
     </body>
 </html>

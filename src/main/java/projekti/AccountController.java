@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,30 +20,53 @@ public class AccountController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private CurrentUserService currentUserService;
 
+    @Autowired
+    private FollowerRepository followerRepository;
+    
     @GetMapping("/accounts")
     public String list(Model model) {
-        model.addAttribute("accounts", accountRepository.findAll());
+        Account account = currentUserService.getCurrentUser();
+        List<Follower> followers = followerRepository.findByTheOneBeingFollowed(account);
+        List<Follower> followRequests = new ArrayList<>();
+        for (Follower follower : followers) {
+            if (follower.getAcceptedAsFollower() == false) {
+                followRequests.add(follower);
+            }
+        }
+        model.addAttribute("currentUser", account);
+        model.addAttribute("followRequests", followRequests);
         return "accounts";
     }
 
     @GetMapping("/accounts/{profileUrl}")
     public String viewProfile(Model model, @PathVariable String profileUrl) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        Account account = currentUserService.getCurrentUser();
+        
+        List<Message> messages = null;
+        
+        List<Follower> followers = followerRepository.findByTheOneBeingFollowed(account);
+        List<Follower> following = followerRepository.findByTheOneWhoFollows(account);
+        
+        if (account.getMessages() != null) {
+            messages = account.getMessages();
+            Collections.sort(messages, (message1, message2) -> {
+                if (message1.getDate().isBefore(message2.getDate())) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+        }
 
-        Account account = accountRepository.findByUsername(username);
-        List<Message> messages = account.getMessages();
-        Collections.sort(messages, (message1, message2) -> {
-            if (message1.getTime().isBefore(message2.getTime())) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
         model.addAttribute("account", account);
         model.addAttribute("messages", messages);
         model.addAttribute("currentUser", account);
+        model.addAttribute("followers", followers);
+        model.addAttribute("following", following);
 
         return "profile";
     }
@@ -69,23 +87,23 @@ public class AccountController {
         return "redirect:/accounts/" + profileUrl;
     }
 
-    /*
-    @PostMapping("/accounts/{id}")
-    public String addNewAccountToFollow(@PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        
-        Account account = accountRepository.findByUsername(username);
-        System.out.println(account);
-        Account accountToFollow = accountRepository.getOne(id);
-        System.out.println(accountToFollow);
-        
-        account.setFollowing(account.getFollowing());
-        List<Account> following = account.getFollowing();
-        following.add(accountToFollow);
-        account.setFollowing(following);
-        System.out.println(account.getFollowing());
-        return "redirect:/accounts/";
+    @GetMapping("/accounts/search")
+    public String searchUsers(Model model, @RequestParam String search) {
+        List<Account> accounts = accountRepository.findAll();
+        // Delete the current user from the list of accounts so that it doesn't appear in the search results
+        Account currentUser = currentUserService.getCurrentUser();
+        accounts.remove(currentUser);
+
+        List<Account> matchingUsers = new ArrayList<>();
+
+        for (Account account : accounts) {
+            if (account.getName().contains(search)) {
+                matchingUsers.add(account);
+            }
+        }
+
+        model.addAttribute("searchResults", matchingUsers);
+        model.addAttribute("currentUser", currentUser);
+        return "accounts";
     }
-     */
 }

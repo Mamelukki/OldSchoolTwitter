@@ -1,6 +1,0 @@
-2021-11-01 15:10:32 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLDataException: Value too long for column "CONTENT VARCHAR(255)": "'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur convallis malesuada ultricies. Donec non tempor lorem, vel s... (406)"; SQL statement:
-insert into comment (content, message_id, user_id, id) values (?, ?, ?, ?) [22001-200]
-2021-11-01 15:11:10 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLDataException: Value too long for column "CONTENT VARCHAR(255)": "'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur convallis malesuada ultricies. Donec non tempor lorem, vel s... (259)"; SQL statement:
-insert into comment (content, message_id, user_id, id) values (?, ?, ?, ?) [22001-200]

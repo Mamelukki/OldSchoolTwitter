@@ -9,6 +9,8 @@
             <p>Navbar</p>
         </header>
 
+        <div th:replace="fragments/layout :: accountSearch" />
+
         <h2 th:text="${account.name}">Name</h2>
         <h3>Profile picture</h3>
         <img th:if="${account.profilePicture != null}" th:src="@{/photos/{id}(id=${account.profilePicture.id})}"/>
@@ -46,9 +48,20 @@
             <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
             <input class="btn btn-primary mb-2" type="submit" value="Add message"/>
         </form>
-
+        
         <h3>Followers</h3>
+        <ol>
+            <li th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${followers}">
+                <p th:text="${follower.theOneWhoFollows.name} + ' : ' + ${follower.date}">Name</p>
+            </li>
+        </ol>
         <h3>Following</h3>
+        <ol>
+            <li th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${following}">
+                <p th:text="${follower.theOneBeingFollowed.name} + ' : ' + ${follower.date}">Name</p>
+            </li>
+        </ol>
+
 
     </body>
 </html>
