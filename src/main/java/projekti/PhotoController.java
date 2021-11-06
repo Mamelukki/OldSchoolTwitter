@@ -38,20 +38,17 @@ public class PhotoController {
     @PostMapping("/photos")
     public String save(@RequestParam("file") MultipartFile file, @RequestParam String description) throws IOException {
         Account account = currentUserService.getCurrentUser();
-        Photo photo = new Photo(file.getBytes(), description, account, new ArrayList<>(), new ArrayList<>());
-        photoRepository.save(photo);
-        List<Photo> photos = account.getPhotos();
-        photos.add(photo);
-        accountRepository.save(account);
 
-        /*
         if (account.getPhotos().size() < 10) {
             if (file.getContentType().equals("image/gif") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/png")) {
-
+                Photo photo = new Photo(file.getBytes(), description, account, new ArrayList<>(), new ArrayList<>());
+                photoRepository.save(photo);
+                List<Photo> photos = account.getPhotos();
+                photos.add(photo);
+                accountRepository.save(account);
             }
         }
-         */
-        return "redirect:/photos";
+        return "redirect:/accounts";
     }
 
     @PostMapping("/photos/profilePicture/{id}")
