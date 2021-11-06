@@ -63,7 +63,7 @@
         </ol>
 
         <h2>Photo album (<span th:text="${count}">count</span> photos)</h2>
-        <div th:each="photo : ${photos}">
+        <div th:each="photo : ${account.photos}">
             <img th:src="@{/photos/{id} (id=${photo.id})}"/>
             <div th:text="${photo.description}"></div>
             <form method="POST" th:action="@{/photos/profilePicture/{id} (id=${photo.id})}">
