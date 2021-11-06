@@ -29,28 +29,28 @@ public class PhotoController {
     @GetMapping("/photos")
     public String home(Model model) {
         Account account = currentUserService.getCurrentUser();
-        /*
         model.addAttribute("photos", account.getPhotos());
         model.addAttribute("count", account.getPhotos().size());
-         */
         model.addAttribute("currentUser", account);
-
         return "photos";
     }
 
     @PostMapping("/photos")
     public String save(@RequestParam("file") MultipartFile file, @RequestParam String description) throws IOException {
         Account account = currentUserService.getCurrentUser();
+        Photo photo = new Photo(file.getBytes(), description, account, new ArrayList<>(), new ArrayList<>());
+        photoRepository.save(photo);
+        List<Photo> photos = account.getPhotos();
+        photos.add(photo);
+        accountRepository.save(account);
 
+        /*
         if (account.getPhotos().size() < 10) {
             if (file.getContentType().equals("image/gif") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/png")) {
-                Photo photo = new Photo(file.getBytes(), description, account, new ArrayList<>(), new ArrayList<>());
-                photoRepository.save(photo);
-                List<Photo> photos = account.getPhotos();
-                photos.add(photo);
-                accountRepository.save(account);
+
             }
         }
+         */
         return "redirect:/photos";
     }
 
