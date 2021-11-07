@@ -1,6 +1,5 @@
 package projekti;
 
-import java.sql.Types;
 import org.hibernate.dialect.PostgreSQL82Dialect;
 import org.hibernate.type.descriptor.sql.BinaryTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
