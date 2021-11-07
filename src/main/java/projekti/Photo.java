@@ -20,7 +20,9 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Data
 public class Photo extends AbstractPersistable<Long> {
 
+    @Lob
     @Type(type = "org.hibernate.type.ImageType")
+    // @Basic(fetch = FetchType.LAZY)
     private byte[] content;
     private String description; 
     @ManyToOne
