@@ -38,7 +38,6 @@ public class PhotoController {
     @PostMapping("/photos")
     public String save(@RequestParam("file") MultipartFile file, @RequestParam String description) throws IOException {
         Account account = currentUserService.getCurrentUser();
-        System.out.println(file);
 
         if (account.getPhotos().size() < 10) {
             if (file.getContentType().equals("image/gif") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/png")) {
