@@ -20,13 +20,16 @@ public class AccountController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private CurrentUserService currentUserService;
 
     @Autowired
     private FollowerRepository followerRepository;
-    
+
+    @Autowired
+    private PhotoRepository photoRepository;
+
     @GetMapping("/accounts")
     public String list(Model model) {
         Account account = currentUserService.getCurrentUser();
@@ -39,18 +42,19 @@ public class AccountController {
         }
         model.addAttribute("currentUser", account);
         model.addAttribute("followRequests", followRequests);
+
         return "accounts";
     }
 
     @GetMapping("/accounts/{profileUrl}")
     public String viewProfile(Model model, @PathVariable String profileUrl) {
         Account account = currentUserService.getCurrentUser();
-        
+
         List<Message> messages = null;
-        
+
         List<Follower> followers = followerRepository.findByTheOneBeingFollowed(account);
         List<Follower> following = followerRepository.findByTheOneWhoFollows(account);
-        
+
         if (account.getMessages() != null) {
             messages = account.getMessages();
             Collections.sort(messages, (message1, message2) -> {
@@ -61,12 +65,14 @@ public class AccountController {
                 }
             });
         }
+        List<Photo> photos = photoRepository.findByUser(account);
 
         model.addAttribute("account", account);
         model.addAttribute("messages", messages);
         model.addAttribute("currentUser", account);
         model.addAttribute("followers", followers);
         model.addAttribute("following", following);
+        model.addAttribute("photos", photos);
 
         return "profile";
     }

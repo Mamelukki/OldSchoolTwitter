@@ -48,7 +48,7 @@
             <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
             <input class="btn btn-primary mb-2" type="submit" value="Add message"/>
         </form>
-        
+
         <h3>Followers</h3>
         <ol>
             <li th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${followers}">
@@ -62,6 +62,31 @@
             </li>
         </ol>
 
+        <h3>Photos</h3>
+        <div th:each="photo : ${photos}">
+            <img th:src="@{/photos/{id} (id=${photo.id})}"/>
+            <div th:text="${photo.description}"></div>
+            <form method="POST" th:action="@{/photos/profilePicture/{id} (id=${photo.id})}">
+                <input type="submit" value="Set as profile picture"/>
+            </form>
 
+            <div th:text="'Likes: ' + ${#lists.size(photo.likes)}">Likes</div>
+            <form method="POST" th:action="@{/photos/{id}/like (id=${photo.id})}">
+                <input type="submit" value="Like"/>
+            </form>
+            <form th:method="delete" th:action="@{/photos/{id}/delete (id=${photo.id})}">
+                <input type="submit" value="Delete"/>
+            </form>
+            <h4>Comments</h4>
+            <ul>
+                <li th:each="comment : ${photo.comments}">
+                    <span th:text="${comment.user.username + ': ' + comment.content}">Comment</span>
+                </li>
+            </ul>
+            <form class="form-inline" method="POST" th:action="@{/photos/{id}/comment(id=${photo.id})}">
+                <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
+                <input class="btn btn-primary mb-2" type="submit" value="Add comment"/>
+            </form>
+        </div>
     </body>
 </html>
