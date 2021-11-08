@@ -3,11 +3,14 @@ package projekti;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,50 +29,33 @@ public class AccountController {
 
     @Autowired
     private FollowerRepository followerRepository;
+    
+    @Autowired
+    private MessageLimitService messageLimitService;
 
     @Autowired
     private PhotoRepository photoRepository;
 
     @GetMapping("/accounts")
     public String list(Model model) {
-        Account account = currentUserService.getCurrentUser();
-        List<Follower> followers = followerRepository.findByTheOneBeingFollowed(account);
-        List<Follower> followRequests = new ArrayList<>();
-        for (Follower follower : followers) {
-            if (follower.getAcceptedAsFollower() == false) {
-                followRequests.add(follower);
-            }
-        }
-        model.addAttribute("currentUser", account);
-        model.addAttribute("followRequests", followRequests);
-
         return "accounts";
     }
 
     @GetMapping("/accounts/{profileUrl}")
     public String viewProfile(Model model, @PathVariable String profileUrl) {
-        Account account = currentUserService.getCurrentUser();
-
-        List<Message> messages = null;
+        Account currentUser = currentUserService.getCurrentUser();
+        Account account = accountRepository.findByProfileUrl(profileUrl);
 
         List<Follower> followers = followerRepository.findByTheOneBeingFollowed(account);
         List<Follower> following = followerRepository.findByTheOneWhoFollows(account);
 
-        if (account.getMessages() != null) {
-            messages = account.getMessages();
-            Collections.sort(messages, (message1, message2) -> {
-                if (message1.getDate().isBefore(message2.getDate())) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            });
-        }
+        List<Message> messagesToShow = messageLimitService.getLast25Messages(account, following);
         List<Photo> photos = photoRepository.findByUser(account);
 
+        System.out.println(currentUser.getUsername());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("account", account);
-        model.addAttribute("messages", messages);
-        model.addAttribute("currentUser", account);
+        model.addAttribute("messages", messagesToShow);
         model.addAttribute("followers", followers);
         model.addAttribute("following", following);
         model.addAttribute("photos", photos);
@@ -78,19 +64,25 @@ public class AccountController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(@ModelAttribute Account account) {
         return "register";
     }
 
     @PostMapping("/register")
-    public String add(@RequestParam String name, @RequestParam String username, @RequestParam String profileUrl, @RequestParam String password) {
-        if (accountRepository.findByUsername(username) != null) {
+    public String add(@Valid @ModelAttribute Account account, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
+        if (accountRepository.findByUsername(account.getUsername()) != null) {
             return "redirect:/register";
         }
 
-        Account a = new Account(new ArrayList<>(), new ArrayList<>(), name, username, profileUrl, passwordEncoder.encode(password), null);
-        accountRepository.save(a);
-        return "redirect:/accounts/" + profileUrl;
+        account.setMessages(new ArrayList<>());
+        account.setPhotos(new ArrayList<>());
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        accountRepository.save(account);
+        return "redirect:/accounts/" + account.getProfileUrl();
     }
 
     @GetMapping("/accounts/search")
@@ -103,7 +95,7 @@ public class AccountController {
         List<Account> matchingUsers = new ArrayList<>();
 
         for (Account account : accounts) {
-            if (account.getName().contains(search)) {
+            if (account.getName().toLowerCase().contains(search.toLowerCase())) {
                 matchingUsers.add(account);
             }
         }

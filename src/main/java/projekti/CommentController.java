@@ -1,5 +1,6 @@
 package projekti;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,41 +26,43 @@ public class CommentController {
     @Autowired
     private CurrentUserService currentUserService;
     
-    @PostMapping("/messages/{id}/comment")
-    public String addCommentToMessage(@PathVariable Long id, @RequestParam String content) {
+    @PostMapping("/accounts/{profileUrl}/messages/{id}/comment")
+    public String addCommentToMessage(@PathVariable String profileUrl, @PathVariable Long id, @RequestParam String content) {
         Message message = messageRepository.getOne(id);
+        Account visitedAccount = accountRepository.findByProfileUrl(profileUrl);
+        Account account = currentUserService.getCurrentUser();
         
         Comment comment = new Comment();
         comment.setContent(content.trim());
-        
-        Account account = currentUserService.getCurrentUser();
-        
         comment.setUser(account);
+        comment.setTime(LocalDateTime.now());
+        
         List<Comment> comments = message.getComments();
         comments.add(comment);
         
         commentRepository.save(comment);
         messageRepository.save(message);
         
-        return "redirect:/accounts/" + account.getProfileUrl();
+        return "redirect:/accounts/" + visitedAccount.getProfileUrl();
     }
     
-    @PostMapping("/photos/{id}/comment")
-    public String addCommentToPhoto(@PathVariable Long id, @RequestParam String content) {
+    @PostMapping("/accounts/{profileUrl}/photos/{id}/comment")
+    public String addCommentToPhoto(@PathVariable String profileUrl, @PathVariable Long id, @RequestParam String content) {
         Photo photo = photoRepository.getOne(id);
+        Account account = accountRepository.findByProfileUrl(profileUrl);
         
         Comment comment = new Comment();
         comment.setContent(content.trim());
         
-        Account account = currentUserService.getCurrentUser();
+        Account currentUser = currentUserService.getCurrentUser();
         
-        comment.setUser(account);
+        comment.setUser(currentUser);
         List<Comment> comments = photo.getComments();
         comments.add(comment);
         
         commentRepository.save(comment);
         photoRepository.save(photo);
         
-        return "redirect:/photos";
+        return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }
 }

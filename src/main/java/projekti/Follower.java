@@ -19,6 +19,6 @@ public class Follower extends AbstractPersistable<Long> {
     @ManyToOne
     private Account theOneWhoFollows; 
     private Boolean acceptedAsFollower;
-    private LocalDateTime date;
+    private LocalDateTime time;
     
 }

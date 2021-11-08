@@ -1,5 +1,6 @@
 package projekti;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -16,5 +17,6 @@ public class Comment extends AbstractPersistable<Long> {
     private String content;
     @ManyToOne
     private Account user;
+    private LocalDateTime time;
     
 }

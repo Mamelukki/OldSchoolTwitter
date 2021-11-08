@@ -43,41 +43,40 @@ public class MessageController {
         return "messages";
     }
 
-    @PostMapping("/messages")
-    public String add(@RequestParam String content) {
+    @PostMapping("/accounts/{profileUrl}/messages")
+    public String add(@PathVariable String profileUrl, @RequestParam String content) {
         Account account = currentUserService.getCurrentUser();
+        Account visitedAccount = accountRepository.findByProfileUrl(profileUrl);
         
         if (content != null && !content.trim().isEmpty()) {
             Message message = new Message();
             message.setContent(content.trim());
-
+            message.setTime(LocalDateTime.now());
             message.setUser(account);
-            List<Message> messages = account.getMessages();
+            List<Message> messages = visitedAccount.getMessages();
             messages.add(message);
-            message.setDate(LocalDateTime.now());
-            account.setMessages(messages);
 
             accountRepository.save(account);
+            accountRepository.save(visitedAccount);
             messageRepository.save(message);
         }
 
-        return "redirect:/accounts/" + account.getProfileUrl();
+        return "redirect:/accounts/" + visitedAccount.getProfileUrl();
     }
 
-    @PostMapping("/messages/{id}/like")
-    public String addLike(@PathVariable Long id) {
+    @PostMapping("/accounts/{profileUrl}/messages/{id}/like")
+    public String addLike(@PathVariable String profileUrl, @PathVariable Long id) {
         Message message = messageRepository.getOne(id);
-
         Account account = currentUserService.getCurrentUser();
+        Account visitedAccount = accountRepository.findByProfileUrl(profileUrl);
 
         List<Account> likes = message.getLikes();
 
         if (!likes.contains(account)) {
             likes.add(account);
-            message.setLikes(likes);
             messageRepository.save(message);
         }
 
-        return "redirect:/accounts/" + account.getProfileUrl();
+        return "redirect:/accounts/" + visitedAccount.getProfileUrl();
     }
 }

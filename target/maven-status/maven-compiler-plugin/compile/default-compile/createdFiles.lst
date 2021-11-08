@@ -1,4 +1,3 @@
-projekti/CustomPostgreSQLDialect.class
 projekti/FollowerController.class
 projekti/DefaultController.class
 projekti/MessageController.class
@@ -9,6 +8,7 @@ projekti/AccountRepository.class
 projekti/AccountController.class
 projekti/Follower.class
 projekti/PhotoRepository.class
+projekti/MessageLimitService.class
 projekti/Photo.class
 projekti/PhotoController.class
 projekti/FollowerRepository.class

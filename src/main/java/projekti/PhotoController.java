@@ -1,5 +1,6 @@
 package projekti;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +27,20 @@ public class PhotoController {
     @Autowired
     private CurrentUserService currentUserService;
 
-    @GetMapping("/photos")
-    public String home(Model model) {
-        Account account = currentUserService.getCurrentUser();
+    @GetMapping("/accounts/{profileUrl}/photos")
+    public String home(Model model, @PathVariable String profileUrl) {
+        Account account = accountRepository.findByProfileUrl(profileUrl);
+        Account currentUser = currentUserService.getCurrentUser();
         model.addAttribute("photos", account.getPhotos());
+        model.addAttribute("account", account);
         model.addAttribute("count", account.getPhotos().size());
-        model.addAttribute("currentUser", account);
+        model.addAttribute("currentUser", currentUser);
         return "photos";
     }
 
-    @PostMapping("/photos")
-    public String save(@RequestParam("file") MultipartFile file, @RequestParam String description) throws IOException {
-        Account account = currentUserService.getCurrentUser();
+    @PostMapping("accounts/{profileUrl}/photos")
+    public String save(@PathVariable String profileUrl, @RequestParam("file") MultipartFile file, @RequestParam String description) throws IOException {
+        Account account = accountRepository.findByProfileUrl(profileUrl);
 
         if (account.getPhotos().size() < 10) {
             if (file.getContentType().equals("image/gif") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/png")) {
@@ -48,25 +51,25 @@ public class PhotoController {
                 accountRepository.save(account);
             }
         }
-        return "redirect:/photos";
+        return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }
 
-    @PostMapping("/photos/profilePicture/{id}")
+    @PostMapping("/accounts/{profileUrl}/photos/profilePicture/{id}")
     public String addProfilePicture(@PathVariable Long id) {
         Account account = currentUserService.getCurrentUser();
         Photo photo = photoRepository.getOne(id);
 
         account.setProfilePicture(photo);
         accountRepository.save(account);
-        return "redirect:/photos";
+        return "redirect:/accounts/" + account.getProfileUrl()  + "/photos";
     }
 
-    @DeleteMapping("/photos/{id}/delete")
-    public String deletePicture(@PathVariable Long id) {
+    @DeleteMapping("/accounts/{profileUrl}/photos/{id}/delete")
+    public String deletePicture(@PathVariable String profileUrl, @PathVariable Long id) {
         Account account = currentUserService.getCurrentUser();
         Photo photo = photoRepository.getOne(id);
 
-        if (account.getProfilePicture().equals(photo)) {
+        if (account.getProfilePicture() != null && account.getProfilePicture().equals(photo)) {
             account.setProfilePicture(null);
         }
 
@@ -74,25 +77,27 @@ public class PhotoController {
         photos.remove(photo);
         accountRepository.save(account);
         photoRepository.delete(photo);
-        return "redirect:/photos";
+        return "redirect:/accounts/" + account.getProfileUrl()  + "/photos";
     }
 
-    @PostMapping("/photos/{id}/like")
-    public String addLike(@PathVariable Long id) {
-        Account account = currentUserService.getCurrentUser();
+    @PostMapping("/accounts/{profileUrl}/photos/{id}/like")
+    public String addLike(@PathVariable String profileUrl, @PathVariable Long id) {
+        Account currentUser = currentUserService.getCurrentUser();
+        Account account = accountRepository.findByProfileUrl(profileUrl);
+        
         Photo photo = photoRepository.getOne(id);
 
         List<Account> likes = photo.getLikes();
 
-        if (!likes.contains(account)) {
-            likes.add(account);
+        if (!likes.contains(currentUser)) {
+            likes.add(currentUser);
             photoRepository.save(photo);
         }
 
-        return "redirect:/photos";
+        return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }
 
-    @GetMapping(path = "/photos/{id}", produces = "image/*")
+    @GetMapping(path = "/accounts/{profileUrl}/photos/{id}", produces = "image/*")
     @ResponseBody
     public byte[] getContent(@PathVariable Long id) {
         return photoRepository.getOne(id).getContent();
