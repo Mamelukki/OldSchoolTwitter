@@ -12,7 +12,6 @@
 
             <div class="row">
                 <div class="col-4">
-                    <h5 th:text="${account.name}">Name</h5>
                     <div th:if="${account.profilePicture != null}" class="card" style="margin-bottom: 20px">
                         <img th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${account.profilePicture.id})}"/>
                     </div>
@@ -40,6 +39,13 @@
                     </div>
                 </div>
                 <div class="col-8">
+                    <div class="mb-3">
+                        <div class="card bg-light">
+                            <div style="margin:auto" class="card-body">
+                                <h3 th:text="${account.name}">Name</h3>
+                            </div>
+                        </div>
+                    </div>
                     <div th:if="${account.username == currentUser.username}">
                         <h5>Add message</h5>
                         <form method="POST" th:action="@{/accounts/{profileUrl}/messages (profileUrl=${account.profileUrl})}" action="/messages">
