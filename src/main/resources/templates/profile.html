@@ -16,7 +16,7 @@
                     <div th:if="${account.profilePicture != null}" class="card" style="margin-bottom: 20px">
                         <img th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${account.profilePicture.id})}"/>
                     </div>
-                    <div class="row" th:if="${account.username == currentUser.username}">
+                    <div class="row">
                         <div class="col-8">
                             <div style="margin-bottom: 20px">
                                 <h5>Photo album</h5>

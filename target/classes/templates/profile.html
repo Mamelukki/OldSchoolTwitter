@@ -16,7 +16,7 @@
                     <div th:if="${account.profilePicture != null}" class="card" style="margin-bottom: 20px">
                         <img th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${account.profilePicture.id})}"/>
                     </div>
-                    <div class="row" th:if="${account.username == currentUser.username}">
+                    <div class="row">
                         <div class="col-8">
                             <div style="margin-bottom: 20px">
                                 <h5>Photo album</h5>
@@ -67,7 +67,7 @@
                                             </form>
                                             <form th:if="${#lists.contains(message.likes, currentUser)}" method="POST" th:action="@{/accounts/{profileUrl}/messages/{id}/like(profileUrl=${account.profileUrl}, id=${message.id})}">
                                                 <input type="hidden" name="value" value="removeLike"/>
-                                                <input class="btn btn-danger mb-2" type="submit" value="Remove like"/>
+                                                <input class="btn btn-secondary mb-2" type="submit" value="Remove like"/>
                                             </form>
                                             <span class="p-2" th:text="'Likes: ' + ${#lists.size(message.likes)}"></span>
                                         </div>
