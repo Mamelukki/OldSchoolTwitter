@@ -9,7 +9,7 @@ Technical implementation: Java, Spring Boot, JPA, SQL database (h2 on local, Pos
 The app opens the login page by default so I recommend that you start using the app by navigating to the register page (just add /register at the end of the address or [click here](https://nameless-river-37493.herokuapp.com/register)).
 
 ### Worth mentioning
-So far there are no automatic tests. There are also no notifications or error messages. Everything should still work even if you do not get a notification, for example making a follow request. There are also some other flaws, such as the app crashign with too long messages or too big photos. The way the messages are limited to the last 25 and comments to the last 10 are clumsy and inefficient and there is probably a better way to use the database to get the relevant data. Due to time limitation, I had to make some bad choices to get the desired features into the app in time.
+So far there are no automatic tests. There are also no notifications or error messages. Everything should still work even if you do not get a notification, for example when making a follow request. There are also some other flaws, such as the app crashing with too long messages or too big photos. The way the messages are limited to the last 25 and comments to the last 10 are clumsy and inefficient and there is probably a better way to use the database to get the relevant data. Due to time limitation, I had to make some bad choices to get all the desired features into the app in time.
 
 ### How to use the app
 
