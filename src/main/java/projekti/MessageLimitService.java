@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// There should be a better way to do this but it will do for now because of the time limit
+// There should be a better way to do this (maybe a query to the database?) but I do not have time to improve it before the project deadline so it will have to do
 
 @Service
 public class MessageLimitService {

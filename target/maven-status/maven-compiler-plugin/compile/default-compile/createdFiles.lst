@@ -15,8 +15,10 @@ projekti/FollowerRepository.class
 projekti/DevelopmentSecurityConfiguration.class
 projekti/MessageRepository.class
 projekti/CurrentUserService.class
+projekti/TestSecurityConfiguration$DevelopmentSecurityConfiguration.class
 projekti/CommentRepository.class
 projekti/CustomUserDetailsService.class
 projekti/Account.class
 projekti/Message.class
+projekti/TestSecurityConfiguration.class
 projekti/ProductionSecurityConfiguration.class

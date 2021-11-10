@@ -26,23 +26,6 @@ public class MessageController {
     @Autowired
     private CurrentUserService currentUserService;
 
-    @GetMapping("/messages")
-    public String view(Model model) {
-        Account account = currentUserService.getCurrentUser();
-
-        List<Comment> comments = commentRepository.findAll();
-        List<Comment> commentsByUser = new ArrayList();
-        for (Comment comment : comments) {
-            if (comment.getUser().equals(account)) {
-                commentsByUser.add(comment);
-            }
-        }
-
-        model.addAttribute("messages", messageRepository.findAll());
-        model.addAttribute("comments", commentsByUser);
-        return "messages";
-    }
-
     @PostMapping("/accounts/{profileUrl}/messages")
     public String add(@PathVariable String profileUrl, @RequestParam String content) {
         Account account = currentUserService.getCurrentUser();

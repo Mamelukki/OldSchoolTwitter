@@ -42,10 +42,10 @@
                         </form>
                         <form th:if="${#lists.contains(photo.likes, currentUser)}" method="POST" th:action="@{/accounts/{profileUrl}/photos/{id}/like (profileUrl=${account.profileUrl}, id=${photo.id})}">
                             <input type="hidden" name="value" value="removeLike"/>
-                            <input class="btn btn-danger mb-2" type="submit" value="Remove like"/>
+                            <input class="btn btn-secondary mb-2" type="submit" value="Remove like"/>
                         </form>
                         <form th:if="${currentUser.username == account.username}" th:method="delete" th:action="@{/accounts/{profileUrl}/photos/{id}/delete (profileUrl=${account.profileUrl}, id=${photo.id})}">
-                            <input class="btn btn-secondary mb-2" type="submit" value="Delete"/>
+                            <input class="btn btn-danger mb-2" type="submit" value="Delete"/>
                         </form>
                         <h5>Comments</h5>
                         <div th:each="comment : ${photo.comments}">
