@@ -10,7 +10,7 @@
                 <p>Navbar</p>
             </header>
 
-            <h4>Photo album of <span th:text="${currentUser.name}">name</span> (<span th:text="${count}">count</span> photos)</h4>
+            <h4>Photo album of <span th:text="${account.name}">name</span> (<span th:text="${count}">count</span> photos)</h4>
 
             <div th:if="${currentUser.username == account.username}">
                 <h5>Add new photo</h5>
