@@ -16,10 +16,8 @@
                 <h5>Add new photo</h5>
 
                 <form method="POST" th:action="@{/accounts/{profileUrl}/photos (profileUrl=${account.profileUrl})}" enctype="multipart/form-data">
-                    <div class="custom-file mb-2">
-                        <input class="custom-file-input" type="file" name="file" id="file" />
-                        <label for="file" class="custom-file-label">Choose photo</label>
-                    </div>
+                    <label for="file" class="form-label">Photo</label>
+                    <input class="form-control mb-2" type="file" name="file" id="file" />
                     <label for="description" class="form-label">Description</label>
                     <input class="form-control mb-2" type="text" name="description" id="description" />
                     <input class="btn btn-primary mb-2" type="submit" value="Add"/>
