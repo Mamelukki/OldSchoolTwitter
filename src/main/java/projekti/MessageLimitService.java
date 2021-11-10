@@ -20,7 +20,7 @@ public class MessageLimitService {
     @Autowired
     private FollowerRepository followerRepository;
 
-    public List<Message> getLast25Messages(Account account, List<Follower> following) {
+    public List<Message> getLatest25Messages(Account account, List<Follower> following) {
         List<Message> messages = account.getMessages();
 
         // Find the messages of the people who the user is following and add them to the list of messages

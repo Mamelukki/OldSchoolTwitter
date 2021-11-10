@@ -29,7 +29,6 @@ public class ProductionSecurityConfiguration extends WebSecurityConfigurerAdapte
 
         http.authorizeRequests()
                 .antMatchers("/register","/register/**").permitAll()
-                .antMatchers("/h2-console","/h2-console/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin().permitAll().and()
                 .logout().permitAll();

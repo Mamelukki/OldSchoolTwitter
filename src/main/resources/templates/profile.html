@@ -10,62 +10,83 @@
                 <p>Navbar</p>
             </header>
 
-            <h2 th:text="${account.name}">Name</h2>
-            <img th:if="${account.profilePicture != null}" width="20%" height="20%" th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${account.profilePicture.id})}"/>
-            <div>
-                <a th:href="@{/accounts/{profileUrl}/photos (profileUrl=${account.profileUrl})}">Check my photo album!</a>
-            </div>
-            <div th:if="${account.username == currentUser.username}">
-                <h5>Add message</h5>
-                <form class="form-inline" method="POST" th:action="@{/accounts/{profileUrl}/messages (profileUrl=${account.profileUrl})}" action="/messages">
-                    <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
-                    <input class="btn btn-primary mb-2" type="submit" value="Add message"/>
-                </form>
-            </div>
-
-            <h5>Messages</h5>
-            <div th:each="message : ${messages}">
-                <div>
+            <div class="row">
+                <div class="col-4">
+                    <h5 th:text="${account.name}">Name</h5>
+                    <div th:if="${account.profilePicture != null}" class="card" style="margin-bottom: 20px">
+                        <img th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${account.profilePicture.id})}"/>
+                    </div>
+                    <div class="row" th:if="${account.username == currentUser.username}">
+                        <div class="col-8">
+                            <div style="margin-bottom: 20px">
+                                <h5>Photo album</h5>
+                                <a th:href="@{/accounts/{profileUrl}/photos (profileUrl=${account.profileUrl})}">Check my photo album!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px">
+                        <h5>Followers</h5>
+                        <div th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${followers}">
+                            <a th:href="@{/accounts/{currentUser} (currentUser=${follower.theOneWhoFollows.profileUrl})}" th:text="${follower.theOneWhoFollows.name}">Name</a>
+                            <small th:text="${'Follower since ' + #temporals.format(follower.time, 'dd.MM.yyyy HH:mm')}">Date</small>
+                        </div>
+                    </div>
                     <div>
-                        <img th:if="${account.profilePicture != null}" width="40px" height="40px" th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${message.user.profilePicture.id})}"/>
-                        <span th:text="${#temporals.format(message.time, 'dd.MM.yyyy HH:mm')}" />
-                        <p th:text="${message.content}"></p>
-                        <span th:text="${#lists.size(message.likes)}"></span>
-                        <form method="POST" th:action="@{/accounts/{profileUrl}/messages/{id}/like(profileUrl=${account.profileUrl}, id=${message.id})}">
-                            <input type="hidden" name="value" value="like"/>
-                            <input class="btn btn-primary mb-2" type="submit" value="Like"/>
+                        <h5>Following</h5>
+                        <div th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${following}">
+                            <a th:href="@{/accounts/{currentUser} (currentUser=${follower.theOneBeingFollowed.profileUrl})}" th:text="${follower.theOneBeingFollowed.name}">Name</a>
+                            <small th:text="${'Following since ' + #temporals.format(follower.time, 'dd.MM.yyyy HH:mm')}">Date</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div th:if="${account.username == currentUser.username}">
+                        <h5>Add message</h5>
+                        <form method="POST" th:action="@{/accounts/{profileUrl}/messages (profileUrl=${account.profileUrl})}" action="/messages">
+                            <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
+                            <input class="btn btn-primary mb-2" type="submit" value="Add message"/>
                         </form>
                     </div>
-                </div>
-                <div>
-                    <div th:each="comment : ${message.comments}">
-                        <img th:if="${comment.user.profilePicture != null}" width="40px" height="40px" th:src="@{/accounts/{profileUrl}/photos/{id}(profileUrl=${account.profileUrl}, id=${comment.user.profilePicture.id})}"/>
-                        <span th:text="${comment.user.name}" />
-                        <span th:text="${#temporals.format(comment.time, 'dd.MM.yyyy HH:mm')}" />
-                        <span th:text="${comment.content}">Comment</span>
-                    </div>
-                    <form class="form-inline" method="POST" th:action="@{/accounts/{profileUrl}/messages/{id}/comment(profileUrl=${account.profileUrl}, id=${message.id})}">
-                        <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
-                        <input class="btn btn-primary mb-2" type="submit" value="Add comment"/>
-                    </form>
-                </div>
-            </div>
+                    <h5>Messages</h5>
 
-            <div class="row">
-                <div class="col-6">
-                    <h5>Followers</h5>
-                    <div th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${followers}">
-                        <img th:if="${follower.theOneWhoFollows.profilePicture != null}" width="40px" height="40px" th:src="@{/accounts/{profileUrl}/photos/{id}(profileUrl=${follower.theOneWhoFollows.profileUrl}, id=${follower.theOneWhoFollows.profilePicture.id})}"/>
-                        <a th:href="@{/accounts/{currentUser} (currentUser=${follower.theOneWhoFollows.profileUrl})}" th:text="${follower.theOneWhoFollows.name}">Name</a>
-                        <small th:text="${'Follower since ' + #temporals.format(follower.time, 'dd.MM.yyyy HH:mm')}">Date</small>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <h5>Following</h5>
-                    <div th:if='${follower.acceptedAsFollower == true}' th:each="follower : ${following}">
-                        <img th:if="${follower.theOneBeingFollowed.profilePicture != null}" width="40px" height="40px" th:src="@{/accounts/{profileUrl}/photos/{id}(profileUrl=${follower.theOneBeingFollowed.profileUrl}, id=${follower.theOneBeingFollowed.profilePicture.id})}"/>
-                        <a th:href="@{/accounts/{currentUser} (currentUser=${follower.theOneBeingFollowed.profileUrl})}" th:text="${follower.theOneBeingFollowed.name}">Name</a>
-                        <small th:text="${'Following since ' + #temporals.format(follower.time, 'dd.MM.yyyy HH:mm')}">Date</small>
+                    <div th:each="message : ${messages}">
+                        <div class="card" style="margin-bottom: 20px">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <a th:href="@{/accounts/{currentUser} (currentUser=${message.user.profileUrl})}" th:text="${message.user.name}">Name</a>
+                                        <span th:text="${#temporals.format(message.time, 'dd.MM.yyyy HH:mm')}" />
+                                        <p th:text="${message.content}"></p>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="d-flex flex-row-reverse">     
+                                            <form th:if="${!#lists.contains(message.likes, currentUser)}" method="POST" th:action="@{/accounts/{profileUrl}/messages/{id}/like(profileUrl=${account.profileUrl}, id=${message.id})}">
+                                                <input type="hidden" name="value" value="like"/>
+                                                <input class="btn btn-primary mb-2" type="submit" value="Like" />
+                                            </form>
+                                            <form th:if="${#lists.contains(message.likes, currentUser)}" method="POST" th:action="@{/accounts/{profileUrl}/messages/{id}/like(profileUrl=${account.profileUrl}, id=${message.id})}">
+                                                <input type="hidden" name="value" value="removeLike"/>
+                                                <input class="btn btn-secondary mb-2" type="submit" value="Remove like"/>
+                                            </form>
+                                            <span class="p-2" th:text="'Likes: ' + ${#lists.size(message.likes)}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-left: 70px">
+                                    <div th:each="comment : ${message.tenLatestCommentsToShow}" style="margin-bottom: 10px">
+                                        <a th:href="@{/accounts/{currentUser} (currentUser=${comment.user.profileUrl})}" th:text="${comment.user.name}">Name</a>
+                                        <span th:text="${#temporals.format(comment.time, 'dd.MM.yyyy HH:mm')}" />
+                                        <p th:text="${comment.content}">Comment</p>
+                                    </div>
+                                    <form method="POST" th:action="@{/accounts/{profileUrl}/messages/{id}/comment(profileUrl=${account.profileUrl}, id=${message.id})}">
+                                        <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
+                                        <input class="btn btn-primary mb-2" type="submit" value="Add comment"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

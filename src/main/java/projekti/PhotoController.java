@@ -44,7 +44,7 @@ public class PhotoController {
 
         if (account.getPhotos().size() < 10) {
             if (file.getContentType().equals("image/gif") || file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/jpg") || file.getContentType().equals("image/png")) {
-                Photo photo = new Photo(file.getBytes(), description, account, new ArrayList<>(), new ArrayList<>());
+                Photo photo = new Photo(file.getBytes(), description, account, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 photoRepository.save(photo);
                 List<Photo> photos = account.getPhotos();
                 photos.add(photo);
@@ -61,7 +61,7 @@ public class PhotoController {
 
         account.setProfilePicture(photo);
         accountRepository.save(account);
-        return "redirect:/accounts/" + account.getProfileUrl()  + "/photos";
+        return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }
 
     @DeleteMapping("/accounts/{profileUrl}/photos/{id}/delete")
@@ -77,22 +77,28 @@ public class PhotoController {
         photos.remove(photo);
         accountRepository.save(account);
         photoRepository.delete(photo);
-        return "redirect:/accounts/" + account.getProfileUrl()  + "/photos";
+        return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }
 
     @PostMapping("/accounts/{profileUrl}/photos/{id}/like")
-    public String addLike(@PathVariable String profileUrl, @PathVariable Long id) {
+    public String addLike(@PathVariable String profileUrl, @PathVariable Long id, @RequestParam String value) {
         Account currentUser = currentUserService.getCurrentUser();
         Account account = accountRepository.findByProfileUrl(profileUrl);
-        
+
         Photo photo = photoRepository.getOne(id);
 
         List<Account> likes = photo.getLikes();
 
-        if (!likes.contains(currentUser)) {
-            likes.add(currentUser);
-            photoRepository.save(photo);
+        if (value.equals("like")) {
+            if (!likes.contains(currentUser)) {
+                likes.add(currentUser);
+            }
+        } else {
+            if (likes.contains(currentUser)) {
+                likes.remove(currentUser);
+            }
         }
+        photoRepository.save(photo);
 
         return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }

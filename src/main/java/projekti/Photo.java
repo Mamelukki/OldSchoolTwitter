@@ -1,9 +1,7 @@
 package projekti;
 
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -30,5 +28,7 @@ public class Photo extends AbstractPersistable<Long> {
     private List<Account> likes;  
     @OneToMany
     private List<Comment> comments;
+    @OneToMany
+    private List<Comment> tenLatestCommentsToShow;
     
 }

@@ -3,6 +3,7 @@
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/Message.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/PhotoRepository.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/AccountRepository.java
+/home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/MessageLimitService.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/PhotoController.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/CommentController.java
 /home/salmisar/NetBeansProjects/mooc-wepa-21-projekti/wepa_Projekti/src/main/java/projekti/Follower.java

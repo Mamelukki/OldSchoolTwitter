@@ -12,17 +12,27 @@
                     <p>menu</p>
                 </header>
 
-                <h5>Accounts</h5>
                 <p th:if="${#lists.isEmpty(searchResults)}">No accounts match your search, try another name!</p>
-                <ol>
-                    <li th:each="account : ${searchResults}">
-                        <span th:text="${account.username}">Username</span>
-                        <span th:text="${account.name}">Name</span>
-                        <form th:action="@{/accounts/{id}/followRequest(id=${account.id})}" th:method="POST">
-                            <input type="submit" value="Send follow request"/>
-                        </form>
-                    </li>
-                </ol>
+                <table class="table" th:if="${!#lists.isEmpty(searchResults)}">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="col-md-11">Accounts that match your search</th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody th:each="account : ${searchResults}">
+                        <tr>
+                            <td>
+                                <a th:href="@{/accounts/{currentUser} (currentUser=${account.profileUrl})}" th:text="${account.name}">Name</a>
+                            </td>
+                            <td>
+                                <form th:action="@{/accounts/{id}/followRequest(id=${account.id})}" th:method="POST">
+                                    <input class="btn btn-primary mb-2" type="submit" value="Send follow request"/>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>

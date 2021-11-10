@@ -5,23 +5,24 @@
         <title th:text="${title}">Title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" th:href="@{/styles/styles.css}"/>
     </head>
     <body>
-        <header th:fragment="navbar(currentUser)">
-            <nav class="navbar navbar-expand-sm bg-light navbar-light">
-                <a class="navbar-brand" th:href="@{/index}">OLD SCHOOL TWITTER</a>
-                <ul class="navbar-nav">
+        <header class="mb-2" th:fragment="navbar(currentUser)">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand">Old School Twitter</a>
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/accounts/{currentUser} (currentUser=${currentUser.profileUrl})}">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/accounts/{currentUser}/photos (currentUser=${currentUser.profileUrl})}">Photo album</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" th:href="@{/accounts/{currentUser}/followers (currentUser=${currentUser.profileUrl})}">Follow requests</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/accounts/{currentUser}/photos (currentUser=${currentUser.profileUrl})}">Photo album</a>
+                    </li>
                 </ul>
-                <form class="form-inline" th:action="@{/accounts/search}" th:method="GET">
+                <form class="form-inline" style="margin-right: 7px" th:action="@{/accounts/search}" th:method="GET">
                     <input class="form-control mr-sm-2" type="text" name="search" id="search" placeholder="Search users by name"/>
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
@@ -30,14 +31,5 @@
                 </form>
             </nav>
         </header>
-
-        <div th:fragment="accountSearch">
-            <h3>Search users</h3>
-            <form th:action="@{/accounts/search}" th:method="GET">
-                <input type="text" name="search" id="search" />
-                <input type="submit" value="Search"/>
-            </form>
-        </div>
-
     </body>
 </html>

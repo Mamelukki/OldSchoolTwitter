@@ -9,15 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class DefaultController {
 
     @Autowired
-    private AccountRepository accountRepository;
-    
-    @Autowired
     private CurrentUserService currentUserService;
     
     @GetMapping("*")
     public String home(Model model) {
         Account account = currentUserService.getCurrentUser();
-        model.addAttribute("currentUser", account);
-        return "index";
+        return "redirect:/accounts/" + account.getProfileUrl();
     }
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="fragments/layout :: head(title='Accounts')" lang="en">
+    <head th:replace="fragments/layout :: head(title='Follow requests')" lang="en">
         <meta charset="UTF-8" />
         <title th:text="${title}">Title</title>
     </head>
@@ -10,30 +10,52 @@
                 <p>menu</p>
             </header>
 
-            <h3>Follow requests</h3>
-            <p th:if="${#lists.isEmpty(followRequests)}">No follow requests</p>
-            <ol>
-                <li th:if="${follower.acceptedAsFollower == false}" th:each="follower : ${followRequests}">
-                    <p th:text="${follower.theOneWhoFollows.name} + ' wants to follow you'"></p>
-                    <form th:action="@{/accounts/{id}/handleFollowRequest(id=${follower.id})}" th:method="POST">
-                        <input type="hidden" name="value" value="accept"/>
-                        <input type="submit" value="Accept"/>
-                    </form>
-                    <form th:action="@{/accounts/{id}/handleFollowRequest(id=${follower.id})}" th:method="POST">
-                        <input type="hidden" name="value" value="reject"/>
-                        <input type="submit" value="Reject"/>
-                    </form>
-                </li>
-            </ol>
-            <p th:if="${#lists.isEmpty(sentFollowRequests)}">You have no pending follow requests</p>
-            <ol>
-                <li th:if="${follower.acceptedAsFollower == false}" th:each="follower : ${sentFollowRequests}">
-                    <p th:text="'You asked to follow ' + ${follower.theOneBeingFollowed.name}"></p>
-                    <form th:action="@{/accounts/{id}/cancelFollowRequest(id=${follower.id})}" th:method="delete">
-                        <input type="submit" value="Cancel request"/>
-                    </form>
-                </li>
-            </ol>
+            <p th:if="${#lists.isEmpty(followRequests) && #lists.isEmpty(sentFollowRequests)}">There are no follow requests</p>
+            <table class="table" th:if="${!#lists.isEmpty(followRequests)}">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="col-md-8">Follow requests</th>
+                        <th class="col-md-1"></th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                </thead>
+                <tbody th:if="${follower.acceptedAsFollower == false}" th:each="follower : ${followRequests}">
+                    <tr>
+                        <td th:text="${follower.theOneWhoFollows.name} + ' wants to follow you'"></td>
+                        <td>
+                            <form th:action="@{/accounts/{id}/handleFollowRequest(id=${follower.id})}" th:method="POST">
+                                <input type="hidden" name="value" value="accept"/>
+                                <input class="btn btn-primary mb-2" type="submit" value="Accept"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{/accounts/{id}/handleFollowRequest(id=${follower.id})}" th:method="POST">
+                                <input type="hidden" name="value" value="reject"/>
+                                <input class="btn btn-danger" type="submit" value="Reject"/>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table" th:if="${!#lists.isEmpty(sentFollowRequests)}">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="col-md-11">Follow requests</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                </thead>
+                <tbody th:if="${follower.acceptedAsFollower == false}" th:each="follower : ${sentFollowRequests}">
+                    <tr>
+                        <td th:text="'You asked to follow ' + ${follower.theOneBeingFollowed.name}"></td>
+                        <td>
+                            <form th:action="@{/accounts/{id}/cancelFollowRequest(id=${follower.id})}" th:method="delete">
+                                <input class="btn btn-danger" type="submit" value="Cancel request"/>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>

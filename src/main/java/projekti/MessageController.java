@@ -22,7 +22,7 @@ public class MessageController {
 
     @Autowired
     private CommentRepository commentRepository;
-    
+
     @Autowired
     private CurrentUserService currentUserService;
 
@@ -47,7 +47,7 @@ public class MessageController {
     public String add(@PathVariable String profileUrl, @RequestParam String content) {
         Account account = currentUserService.getCurrentUser();
         Account visitedAccount = accountRepository.findByProfileUrl(profileUrl);
-        
+
         if (content != null && !content.trim().isEmpty()) {
             Message message = new Message();
             message.setContent(content.trim());
@@ -55,7 +55,7 @@ public class MessageController {
             message.setUser(account);
             List<Message> messages = visitedAccount.getMessages();
             messages.add(message);
-
+            
             accountRepository.save(account);
             accountRepository.save(visitedAccount);
             messageRepository.save(message);
@@ -65,17 +65,23 @@ public class MessageController {
     }
 
     @PostMapping("/accounts/{profileUrl}/messages/{id}/like")
-    public String addLike(@PathVariable String profileUrl, @PathVariable Long id) {
+    public String addLike(@PathVariable String profileUrl, @PathVariable Long id, @RequestParam String value) {
         Message message = messageRepository.getOne(id);
         Account account = currentUserService.getCurrentUser();
         Account visitedAccount = accountRepository.findByProfileUrl(profileUrl);
 
         List<Account> likes = message.getLikes();
 
-        if (!likes.contains(account)) {
-            likes.add(account);
-            messageRepository.save(message);
+        if (value.equals("like")) {
+            if (!likes.contains(account)) {
+                likes.add(account);
+            }
+        } else {
+            if (likes.contains(account)) {
+                likes.remove(account);
+            }
         }
+        messageRepository.save(message);
 
         return "redirect:/accounts/" + visitedAccount.getProfileUrl();
     }

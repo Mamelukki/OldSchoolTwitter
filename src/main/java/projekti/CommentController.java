@@ -10,59 +10,76 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CommentController {
-    
+
     @Autowired
     private CommentRepository commentRepository;
-    
+
     @Autowired
     private AccountRepository accountRepository;
-   
-    @Autowired 
+
+    @Autowired
     private MessageRepository messageRepository;
-    
+
     @Autowired
     private PhotoRepository photoRepository;
-    
+
     @Autowired
     private CurrentUserService currentUserService;
-    
+
     @PostMapping("/accounts/{profileUrl}/messages/{id}/comment")
     public String addCommentToMessage(@PathVariable String profileUrl, @PathVariable Long id, @RequestParam String content) {
         Message message = messageRepository.getOne(id);
         Account visitedAccount = accountRepository.findByProfileUrl(profileUrl);
         Account account = currentUserService.getCurrentUser();
-        
+
         Comment comment = new Comment();
         comment.setContent(content.trim());
         comment.setUser(account);
         comment.setTime(LocalDateTime.now());
-        
+
         List<Comment> comments = message.getComments();
         comments.add(comment);
-        
+
+        List<Comment> latest10Comments = message.getTenLatestCommentsToShow();
+        if (latest10Comments.size() < 10) {
+            latest10Comments.add(comment);
+        } else {
+            latest10Comments.remove(latest10Comments.get(0));
+            latest10Comments.add(comment);
+        }
+
         commentRepository.save(comment);
         messageRepository.save(message);
-        
+
         return "redirect:/accounts/" + visitedAccount.getProfileUrl();
     }
-    
+
     @PostMapping("/accounts/{profileUrl}/photos/{id}/comment")
     public String addCommentToPhoto(@PathVariable String profileUrl, @PathVariable Long id, @RequestParam String content) {
         Photo photo = photoRepository.getOne(id);
         Account account = accountRepository.findByProfileUrl(profileUrl);
-        
+
         Comment comment = new Comment();
         comment.setContent(content.trim());
-        
+        comment.setTime(LocalDateTime.now());
+
         Account currentUser = currentUserService.getCurrentUser();
-        
+
         comment.setUser(currentUser);
         List<Comment> comments = photo.getComments();
         comments.add(comment);
         
+        List<Comment> latest10Comments = photo.getTenLatestCommentsToShow();
+        if (latest10Comments.size() < 10) {
+            latest10Comments.add(comment);
+        } else {
+            latest10Comments.remove(latest10Comments.get(0));
+            latest10Comments.add(comment);
+        }
+
         commentRepository.save(comment);
         photoRepository.save(photo);
-        
+
         return "redirect:/accounts/" + account.getProfileUrl() + "/photos";
     }
 }

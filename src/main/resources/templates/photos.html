@@ -10,45 +10,55 @@
                 <p>Navbar</p>
             </header>
 
-            <h2>Photo album (<span th:text="${count}">count</span> photos)</h2>
-            <div th:each="photo : ${photos}">
-                <img th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${photo.id})}"/>
-                <div th:text="${photo.description}"></div>
-                <form th:if="${currentUser.username == account.username}" method="POST" th:action="@{/accounts/{profileUrl}/photos/profilePicture/{id} (profileUrl=${account.profileUrl}, id=${photo.id})}">
-                    <input type="submit" value="Set as profile picture"/>
-                </form>
+            <h4>Photo album of <span th:text="${currentUser.name}">name</span> (<span th:text="${count}">count</span> photos)</h4>
 
-                <div th:text="'Likes: ' + ${#lists.size(photo.likes)}">Likes</div>
-                <form method="POST" th:action="@{/accounts/{profileUrl}/photos/{id}/like (profileUrl=${account.profileUrl}, id=${photo.id})}">
-                    <input type="submit" value="Like"/>
-                </form>
-                <form th:if="${currentUser.username == account.username}" th:method="delete" th:action="@{/accounts/{profileUrl}/photos/{id}/delete (profileUrl=${account.profileUrl}, id=${photo.id})}">
-                    <input type="submit" value="Delete"/>
-                </form>
-                <h4>Comments</h4>
-                <ul>
-                    <li th:each="comment : ${photo.comments}">
-                        <span th:text="${comment.user.username + ': ' + comment.content}">Comment</span>
-                    </li>
-                </ul>
-                <form class="form-inline" method="POST" th:action="@{/accounts/{profileUrl}/photos/{id}/comment(profileUrl=${account.profileUrl}, id=${photo.id})}">
-                    <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
-                    <input class="btn btn-primary mb-2" type="submit" value="Add comment"/>
+            <div th:if="${currentUser.username == account.username}">
+                <h5>Add new photo</h5>
+
+                <form method="POST" th:action="@{/accounts/{profileUrl}/photos (profileUrl=${account.profileUrl})}" enctype="multipart/form-data">
+                    <div class="custom-file mb-2">
+                        <input class="custom-file-input" type="file" name="file" id="file" />
+                        <label for="file" class="custom-file-label">Choose photo</label>
+                    </div>
+                    <label for="description" class="form-label">Description</label>
+                    <input class="form-control mb-2" type="text" name="description" id="description" />
+                    <input class="btn btn-primary mb-2" type="submit" value="Add"/>
                 </form>
             </div>
 
-            <div th:if="${currentUser.username == account.username}">
-                <h3>Add new photo</h3>
+            <div th:each="photo : ${photos}">
+                <div class="card mb-3">
+                    <img class="card-img-top" th:src="@{/accounts/{profileUrl}/photos/{id} (profileUrl=${account.profileUrl}, id=${photo.id})}"/>
+                    <div class="card-body">
+                        <div th:if="${!#strings.isEmpty(photo.description)}" class="card-title" th:text="${photo.description}"></div>
+                        <form class="card-text" th:if="${currentUser.username == account.username}" method="POST" th:action="@{/accounts/{profileUrl}/photos/profilePicture/{id} (profileUrl=${account.profileUrl}, id=${photo.id})}">
+                            <input class="btn btn-primary mb-2" type="submit" value="Set as profile picture"/>
+                        </form>
 
-                <form method="POST" th:action="@{/accounts/{profileUrl}/photos (profileUrl=${account.profileUrl})}" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Image</label>
-                        <input class="form-control" type="file" name="file" id="file" />
-                        <label for="description" class="form-label">Description</label>
-                        <input class="form-control" type="text" name="description" id="description" />
-                        <input class="btn btn-primary mb-3" type="submit" value="Add"/>
+                        <div class="mb-2" th:text="'Likes: ' + ${#lists.size(photo.likes)}">Likes</div>
+                        <form th:if="${!#lists.contains(photo.likes, currentUser)}" method="POST" th:action="@{/accounts/{profileUrl}/photos/{id}/like (profileUrl=${account.profileUrl}, id=${photo.id})}">
+                            <input type="hidden" name="value" value="like"/>
+                            <input class="btn btn-primary mb-2" type="submit" value="Like"/>
+                        </form>
+                        <form th:if="${#lists.contains(photo.likes, currentUser)}" method="POST" th:action="@{/accounts/{profileUrl}/photos/{id}/like (profileUrl=${account.profileUrl}, id=${photo.id})}">
+                            <input type="hidden" name="value" value="removeLike"/>
+                            <input class="btn btn-danger mb-2" type="submit" value="Remove like"/>
+                        </form>
+                        <form th:if="${currentUser.username == account.username}" th:method="delete" th:action="@{/accounts/{profileUrl}/photos/{id}/delete (profileUrl=${account.profileUrl}, id=${photo.id})}">
+                            <input class="btn btn-danger mb-2" type="submit" value="Delete"/>
+                        </form>
+                        <h5>Comments</h5>
+                        <div th:each="comment : ${photo.comments}">
+                            <a th:href="@{/accounts/{currentUser} (currentUser=${comment.user.profileUrl})}" th:text="${comment.user.name}">Name</a>
+                            <span th:text="${#temporals.format(comment.time, 'dd.MM.yyyy HH:mm')}" />
+                            <p th:text="${comment.content}">Comment</p>
+                        </div>
+                        <form class="form-inline" method="POST" th:action="@{/accounts/{profileUrl}/photos/{id}/comment(profileUrl=${account.profileUrl}, id=${photo.id})}">
+                            <input class="form-control mb-2 mr-sm-2" type="text" name="content"/>
+                            <input class="btn btn-primary mb-2" type="submit" value="Add comment"/>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </body>

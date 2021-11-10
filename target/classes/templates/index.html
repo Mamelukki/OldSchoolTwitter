@@ -5,13 +5,10 @@
         <title th:text="${title}">Title</title>
     </head>
     <body>
-
-        <header th:replace="fragments/layout :: navbar(${currentUser})">
-            <p>menu</p>
-        </header>
-        
-        <h1>Old School Twitter</h1>
-
-
+        <div class="container">
+            <header th:replace="fragments/layout :: navbar(${currentUser})">
+                <p>menu</p>
+            </header>
+        </div>
     </body>
 </html>

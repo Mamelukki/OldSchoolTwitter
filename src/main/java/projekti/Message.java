@@ -25,5 +25,7 @@ public class Message extends AbstractPersistable<Long> {
     private List<Account> likes;    
     @OneToMany
     private List<Comment> comments;
+    @OneToMany
+    private List<Comment> tenLatestCommentsToShow;
 
 }

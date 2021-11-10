@@ -1,7 +1,6 @@
 package projekti;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class AccountController {
 
     @Autowired
     private FollowerRepository followerRepository;
-    
+
     @Autowired
     private MessageLimitService messageLimitService;
 
@@ -49,7 +48,7 @@ public class AccountController {
         List<Follower> followers = followerRepository.findByTheOneBeingFollowed(account);
         List<Follower> following = followerRepository.findByTheOneWhoFollows(account);
 
-        List<Message> messagesToShow = messageLimitService.getLast25Messages(account, following);
+        List<Message> messagesToShow = messageLimitService.getLatest25Messages(account, following);
         List<Photo> photos = photoRepository.findByUser(account);
 
         System.out.println(currentUser.getUsername());
@@ -99,7 +98,7 @@ public class AccountController {
                 matchingUsers.add(account);
             }
         }
-
+        
         model.addAttribute("searchResults", matchingUsers);
         model.addAttribute("currentUser", currentUser);
         return "accounts";
