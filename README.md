@@ -15,13 +15,13 @@ So far there are no automatic tests. There are also no notifications or error me
 
 Start by creating a user. You can also test the app with by logging in with either of the following users:
 
-EITHER
+##### EITHER
 
 Username: Joulupukki
 
 Password: secret
 
-OR
+##### OR
 
 Username: Punakuono
 
