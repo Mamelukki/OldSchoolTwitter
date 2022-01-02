@@ -1,5 +1,8 @@
 # Web server programming Java 2021
-### Project manual
+
+A messaging, following and picture sharing app with features similar to Twitter. Requirements for the application are described [here](https://web-palvelinohjelmointi-21.mooc.fi/projekti). The name "OldSchool" refers to traditional functionalities.
+
+### Technical implementation
 
 Technical implementation: Java, Spring Boot, JPA, SQL database (h2 on local, PostgreSQL on Heroku)
 
@@ -8,8 +11,11 @@ Technical implementation: Java, Spring Boot, JPA, SQL database (h2 on local, Pos
 
 The app opens the login page by default so I recommend that you start using the app by navigating to the register page (just add /register at the end of the address or [click here](https://nameless-river-37493.herokuapp.com/register)).
 
-### Worth mentioning
-So far there are no automatic tests. There are also no notifications or error messages. Everything should still work even if you do not get a notification, for example when making a follow request. There are also some other flaws, such as the app crashing with too long messages or too big photos. The way the messages are limited to the last 25 and comments to the last 10 are clumsy and inefficient and there is probably a better way to use the database to get the relevant data. Due to time limitation, I had to make some bad choices to get all the desired features into the app in time.
+### Worth mentioning / needs improvement
+- So far there are no automatic tests
+- There are also no notifications or error messages
+- There are also some other flaws, such as the app crashing with too long messages or too big photos
+- The way the messages are limited to the last 25 and comments to the last 10 are clumsy and inefficient and there is a better way to use the database to get the relevant data; due to time limitation I had to make some bad choices to get all the desired features into the app in time before the project deadline so the technical debt was purposeful
 
 ### How to use the app
 
