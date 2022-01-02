@@ -1,4 +1,4 @@
-# Web server programming Java 2021
+# Server-side Web Development Java - Project 2021 
 
 A messaging, following and picture sharing app with features similar to Twitter. Requirements for the application are described [here](https://web-palvelinohjelmointi-21.mooc.fi/projekti). The name "OldSchool" refers to traditional functionalities.
 
