@@ -42,3 +42,23 @@ Password: salainen
 - A user who has received a follow request can view the requests under the Follow requests tab. The user can either reject the request which leads to the deletion of the request or accept it after which the person will show up in the following of the other user and the followers of the opposite user. 
 
 - You can log out using the logout button on the navigation bar. 
+
+## Project requirements (in Finnish)
+#### Käyttäjien rekisteröityminen
+Käyttäjä rekisteröityy sovellukseen kirjaamalla sovellukseen käyttäjätunnuksen, salasanan sekä nimen. Tämän lisäksi käyttäjältä kysytään profiilin näyttämisessä käytettävää merkkijonoa, jonka perusteella käyttäjän sivu voidaan löytää sovelluksesta. Esim. “https://sovellus.net/kayttajat/profiili-merkkijono”
+#### Käyttäjien etsiminen ja seuraaminen
+Käyttäjä voi etsiä muita käyttäjiä nimen perusteella. Käyttäjä voi seurata muita järjestelmässä olevia käyttäjiä. Käyttäjä myös tietää keitä hän seuraa.
+#### Seuraajat
+Käyttäjä voi tarkastella omia seuraajiaan. Seurauksen yhteydessä näytetään seuraajan nimi sekä seurauksen aloitusaika. Seuraajan voi myös halutessaan torjua seuraamasta, tällöin seuraus ei näy kummankaan profiilissa.
+#### Kuva-albumi
+Jokaisella käyttäjällä on kuva-albumi. Käyttäjä voi lisätä albumiinsa kuvia ja myös poistaa niitä. Kunkin käyttäjän kuva-albumi voi sisältää korkeintaan 10 kuvaa. Jokaiseen kuvaan liittyy myös tekstimuotoinen kuvaus, joka lisätään kuvaan kuvan lisäyksen yhteydessä.
+#### Profiilikuva
+Käyttäjä voi määritellä yhden kuva-albumissa olevan kuvan profiilikuvaksi.
+#### Henkilökohtainen etusivu
+Jokaisella käyttäjällä on henkilökohtainen “seinä”, joka sisältää henkilön nimen sekä mahdollisesti määritellyn profiilikuvan. Vain käyttäjä voi lähettää seinälle tekstimuotoisia viestejä, mutta seinällä näkyy myös seurattavien henkilöiden omat viestit. Jokaisesta viestistä näytetään viestin lähettäjän nimi, viestin lähetysaika, sekä viestin tekstimuotoinen sisältö. Viestit näytetään seinällä niiden saapumisjärjestyksessä siten, että seinällä näkyy aina korkeintaan 25 uusinta viestiä.
+#### Tykkääminen
+Kirjautuneet käyttäjät voivat tykätä kuvista ja seinällä olevista viesteistä. Tykkääminen tapahtuu viestin ja kuvan yhteydessä olevaa tykkäysnappia painamalla. Kukin käyttäjä voi tykätä tietystä kuvasta ja tietystä viestistä korkeintaan kerran (sama käyttäjä ei saa lisätä useampaa tykkäystä tiettyyn kuvaan tai viestiin). Viestien ja kuvien näytön yhteydessä näytetään niihin liittyvä tykkäysten lukumäärä.
+#### Kommentointi
+Seuraajat voivat kommentoida kuvia ja viestejä. Kommentointi tapahtuu viestin ja kuvan yhteydessä olevan kommentointikentän avulla. Kuvien ja viestien yhteydessä näytetään aina korkeintaan 10 uusinta kommenttia.
+#### Apuresursseja:
+Apumateriaalia tietokannassa olevan ajan käsittelyyn: https://web-palvelinohjelmointi-21.mooc.fi/ekstra/ajan-kasittely-tietokannassa
